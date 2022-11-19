@@ -1,9 +1,11 @@
 const client = require("./connection.js");
 const express = require("express");
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.listen(PORT, () => console.log(`Listening at port ${PORT}`));

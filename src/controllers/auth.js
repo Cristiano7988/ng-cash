@@ -1,4 +1,5 @@
 const client = require("../connection");
+const bcrypt = require("bcryptjs");
 
 exports.signUp = (req, res) => {
   const { username, password } = req.body;
@@ -11,7 +12,7 @@ exports.signUp = (req, res) => {
     const [{ id }] = account.rows;
     const insertUser = `
       insert into users(username, password, account_id)
-      values ('${username}', '${password}', ${id})
+      values ('${username}', '${bcrypt.hashSync(password, 8)}', ${id})
     `;
 
     // Cria usuário
@@ -22,3 +23,7 @@ exports.signUp = (req, res) => {
     });
   });
 };
+
+exports.signIn = (req, res) => {
+
+}

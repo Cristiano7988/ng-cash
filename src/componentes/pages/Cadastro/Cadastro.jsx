@@ -47,7 +47,7 @@ const Cadastro = () => {
       if (validaCadastro()) return;
 
     const { status, data } = await axios
-      .post("http://localhost:8080/api/users", {
+      .post("http://localhost:8080/api/auth/signup", {
         username,
         password,
       })

@@ -26,6 +26,12 @@ const Login = () => {
       .catch((err) => {
         console.log(err);
       });
+
+      if (status === 200) {
+        const { accessToken } = data;
+        localStorage.setItem('accessToken', accessToken);
+        navigate("/");
+      }
   };
 
   return (

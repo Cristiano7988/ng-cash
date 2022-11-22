@@ -26,10 +26,17 @@ export const AuthProvider = ({ children }) => {
       }
   };
 
+  // Desloga o usuário
+  const logout = () => {
+    setUser(null);
+    navigate("/", { replace: true });
+  };
+
   const value = useMemo(
     () => ({
       user,
-      login
+      login,
+      logout
     }),
     [user]
   );

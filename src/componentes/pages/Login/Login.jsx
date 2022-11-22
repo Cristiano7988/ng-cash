@@ -1,37 +1,22 @@
-import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [login, setLogin] = useState({ username: "", password: "" });
+  const [acesso, setAcesso] = useState({ username: "", password: "" });
+  const { login } = useContext(AuthContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setLogin({
-      ...login,
+    setAcesso({
+      ...acesso,
       [name]: value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, password } = login;
-    const { status, data } = await axios
-      .post("http://localhost:8080/api/auth/signin", {
-        username,
-        password,
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-      if (status === 200) {
-        const { accessToken } = data;
-        localStorage.setItem('accessToken', accessToken);
-        navigate("/");
-      }
+    login(acesso);
   };
 
   return (

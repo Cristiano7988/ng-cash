@@ -3,5 +3,5 @@ exports.allAccess = (req, res) => {
 };
 
 exports.userBoard = (req, res) => {
-  res.status(200).send("Acesso restrito.");
+  res.status(200).send({ message: "Acesso restrito.", status: true });
 };

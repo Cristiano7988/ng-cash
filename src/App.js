@@ -1,9 +1,10 @@
-import RouteElement from "./routes";
+import { RouterProvider } from "react-router";
+import { router } from "./routes";
 
 const App = () => {
   return (
     <>
-      <RouteElement />
+      <RouterProvider router={router} />
     </>
   );
 };

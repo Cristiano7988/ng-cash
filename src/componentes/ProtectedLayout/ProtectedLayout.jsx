@@ -8,16 +8,16 @@ import {
   Link,
   ListItemIcon,
   Tooltip,
+  Container,
 } from "@mui/material";
 import { useContext, useState } from "react";
-import { Navigate, useOutlet } from "react-router-dom";
+import { Navigate, Outlet, useOutlet } from "react-router-dom";
 import { AuthContext, useAuth } from "../../hooks/useAuth";
 import { Logout } from "@mui/icons-material";
 import { ThemeContext } from "@emotion/react";
 
 const ProtectedLayout = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const outlet = useOutlet();
   const { user } = useAuth();
   const { logout } = useContext(AuthContext);
   const { palette } = useContext(ThemeContext);
@@ -115,7 +115,9 @@ const ProtectedLayout = () => {
           </Menu>
         </nav>
       </Box>
-      {outlet}
+      <Container>
+        <Outlet />
+      </Container>
     </div>
   );
 };

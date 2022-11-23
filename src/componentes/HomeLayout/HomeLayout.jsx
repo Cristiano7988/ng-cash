@@ -1,7 +1,7 @@
 import { Navigate, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useContext, useState } from 'react';
-import { Box, Tabs, Tab } from '@mui/material';
+import { Box, Tabs, Tab, Container } from '@mui/material';
 import { ThemeContext } from "@emotion/react";
 
 const getIndex = (links, innerText = null) => {
@@ -64,7 +64,9 @@ const HomeLayout = () => {
           </Tabs>
         </nav>
       </Box>
-      <Outlet />
+      <Container style={{ padding: 24 }}>
+        <Outlet />
+      </Container>
     </div>
   )
 };

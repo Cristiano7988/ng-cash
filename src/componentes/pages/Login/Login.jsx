@@ -1,8 +1,11 @@
+import { ThemeContext } from "@emotion/react";
+import { Button, TextField, Typography } from "@mui/material";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../../hooks/useAuth";
 
 const Login = () => {
   const [acesso, setAcesso] = useState({ username: "", password: "" });
+  const { palette } = useContext(ThemeContext);
   const { login } = useContext(AuthContext);
 
   const handleChange = (e) => {
@@ -21,29 +24,44 @@ const Login = () => {
 
   return (
     <section>
-      <h1>Login</h1>
+      <Typography variant="h4" component="h1">
+        Login
+      </Typography>
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            required
-            onChange={handleChange}
-          />
+        <div style={{ padding: '24px 0' }}>
+          <div>
+            <TextField
+              className="text-field"
+              label="Username"
+              variant="outlined"
+              type="text"
+              name="username"
+              required
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <TextField
+              className="text-field"
+              label="Password"
+              type="password"
+              name="password"
+              required
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            name="password"
-            required
-            onChange={handleChange}
+          <Button
+            style={{
+              background: palette.background.default,
+              color: palette.text.primary
+            }}
+            variant="contained"
+            type="submit"
+            children="Enter"
           />
-        </div>
-        <div>
-          <button type="submit">Enter</button>
         </div>
       </form>
     </section>

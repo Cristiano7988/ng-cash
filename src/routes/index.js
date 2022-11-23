@@ -10,6 +10,7 @@ import AuthLayout from "../componentes/AuthLayout";
 import ProtectedLayout from "../componentes/ProtectedLayout";
 import HomeLayout from "../componentes/HomeLayout";
 import Cadastro from "../componentes/pages/Cadastro";
+import Home from "../componentes/pages/Home";
 
 function logout() {
   localStorage.removeItem("user");
@@ -50,7 +51,7 @@ export const router = createBrowserRouter(
       loader={() => defer({ userPromise: getUserData() })}
     >
       <Route element={<HomeLayout />}>
-        <Route path="/" element={<>Home</>} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
       </Route>

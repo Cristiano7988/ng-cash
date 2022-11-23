@@ -1,29 +1,55 @@
 const client = require("../connection");
 const bcrypt = require("bcryptjs");
+const { Pool } = require("pg");
+const pool = new Pool();
 
 exports.signUp = (req, res) => {
   const { username, password } = req.body;
+  
+  pool.connect((error, und, done) => {
+    const shouldAbort = (error) => {
+      if (error) {
+        client.query("ROLLBACK", (error) => {
+          if (error) console.error("Erro ao executar o rolling back", error.stack);
+          done();
+        });
+      }
 
-  // Seleciona conta criada para referenciar no usuário
-  client.query("select id from accounts order by id desc limit 1", (error, account) => {
-    if (error) return res.send({ message: "Não foi possível abrir a conta", status: false, error });
-    else if (!account.rows.length) return res.send({ message: "Não foi possível abrir a conta", status: false });
+      return !!error;
+    };
 
-    const [{ id }] = account.rows;
-    const insertUser = `
-      insert into users(username, password, account_id)
-      values ('${username}', '${bcrypt.hashSync(password, 8)}', ${id})
-    `;
+    client.query("BEGIN", (error) => {
+      if (shouldAbort(error)) return;
 
-    // Cria usuário
-    client.query(insertUser, (error, user) => {
-      if (error) return res.send({ message: "Não foi possível criar o usuário", status: false, error });
-      else if (!!user) return res.send({ message: "Usuário criado", status: true });
-      else return res.send({ message: "Não foi possível criar o usuário", status: false });
+      // Abre a conta
+      client.query("insert into accounts(balance) values (100)", (error, account) => {
+        if (shouldAbort(error)) return
+      });
+
+      // Seleciona conta criada para referenciar no usuário
+      client.query("select id from accounts order by id desc limit 1", (error, account) => {
+        if (shouldAbort(error)) return;
+
+        const [{ id }] = account.rows;
+        const insertUser = `
+          insert into users(username, password, account_id)
+          values ('${username}', '${bcrypt.hashSync(password, 8)}', ${id})
+        `;
+
+        // Cria usuário
+        client.query(insertUser, (error, user) => {
+          if (shouldAbort(error)) return;
+
+          client.query("COMMIT", (error) => {
+            if (error) console.error("Erro ao executar o commit", error.stack);
+            res.send({ message: "Usuário criado", user: { username, password }, status: true })
+          });
+        });
+      });
     });
   });
 };
 
 exports.signIn = (req, res) => {
 
-}
+};

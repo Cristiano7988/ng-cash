@@ -3,6 +3,7 @@ import { Button, List, ListItem, ListItemText, TextField, Typography } from "@mu
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../hooks/useAuth";
 
 const Cadastro = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Cadastro = () => {
       numero: true,
     },
   });
+  const { login } = useContext(AuthContext);
   const { palette } = useContext(ThemeContext);
 
   const validaCadastro = () => Object.values(alerta).map(item =>
@@ -58,7 +60,10 @@ const Cadastro = () => {
         console.log(err);
       });
 
-    if (status === 200 && data.status) navigate("/");
+
+      if ((status === 200) && data.status) {
+        login(data.user);
+      }
   };
 
   return (

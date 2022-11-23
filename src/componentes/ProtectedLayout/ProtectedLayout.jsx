@@ -101,8 +101,8 @@ const ProtectedLayout = () => {
           >
             <MenuItem>
               <Avatar />{" "}
-              <Link href="/dashboard/profile" style={{ color: palette.action.active }} underline="none">
-                Profile
+              <Link href="/dashboard/profile" style={{ color: palette.action.active, textTransform: 'capitalize' }} underline="none">
+                {username}
               </Link>
             </MenuItem>
             <Divider />

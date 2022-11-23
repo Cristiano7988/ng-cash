@@ -19,11 +19,11 @@ const checkUsernameAndPassword = (req, res) => {
 
     if (!validPassword) return res.send({ message: "Senha inválida", status: false, accessToken: null, })
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
+    const accessToken = jwt.sign({ id: user.id }, config.secret, {
       expiresIn: 86400 // 24 hours
     });
 
-    return res.send({ user, accessToken: token });
+    return res.send({ user: { username }, accessToken });
   });
 };
 

@@ -11,7 +11,7 @@ import {
   Container,
 } from "@mui/material";
 import { useContext, useState } from "react";
-import { Navigate, Outlet, useOutlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext, useAuth } from "../../hooks/useAuth";
 import { Logout } from "@mui/icons-material";
 import { ThemeContext } from "@emotion/react";
@@ -115,7 +115,7 @@ const ProtectedLayout = () => {
           </Menu>
         </nav>
       </Box>
-      <Container>
+      <Container style={{ padding: 24 }}>
         <Outlet />
       </Container>
     </div>

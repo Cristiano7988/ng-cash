@@ -5,7 +5,7 @@ import {
   defer
 } from "react-router-dom";
 import Login from "../componentes/pages/Login";
-import Dashboard from "../componentes/pages/Dashboard";
+import Profile from "../componentes/pages/Profile";
 import AuthLayout from "../componentes/AuthLayout";
 import ProtectedLayout from "../componentes/ProtectedLayout";
 import HomeLayout from "../componentes/HomeLayout";
@@ -57,7 +57,7 @@ export const router = createBrowserRouter(
       </Route>
 
       <Route path="/dashboard" element={<ProtectedLayout />}>
-        <Route path="profile" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Route>
   )

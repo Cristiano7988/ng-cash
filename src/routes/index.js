@@ -5,11 +5,12 @@ import {
   defer
 } from "react-router-dom";
 import Login from "../componentes/pages/Login";
-import Dashboard from "../componentes/pages/Dashboard";
+import Profile from "../componentes/pages/Profile";
 import AuthLayout from "../componentes/AuthLayout";
 import ProtectedLayout from "../componentes/ProtectedLayout";
 import HomeLayout from "../componentes/HomeLayout";
 import Cadastro from "../componentes/pages/Cadastro";
+import Home from "../componentes/pages/Home";
 
 function logout() {
   localStorage.removeItem("user");
@@ -50,13 +51,13 @@ export const router = createBrowserRouter(
       loader={() => defer({ userPromise: getUserData() })}
     >
       <Route element={<HomeLayout />}>
-        <Route path="/" element={<>Home</>} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
       </Route>
 
       <Route path="/dashboard" element={<ProtectedLayout />}>
-        <Route path="profile" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Route>
   )

@@ -12,6 +12,36 @@ code {
     monospace;
 }
 
+/* My styles */
+
+h1 {
+  padding-bottom: 24px;
+}
+
 .alerta {
   color: firebrick;
+}
+
+.text-field {
+  margin: 6px 0 !important;
+}
+
+.text-field input {
+  color: #121212;
+}
+
+.text-field label {
+  color: #121212;
+}
+
+.text-field:active fieldset {
+  box-shadow: 0 0 2px #121212;
+}
+
+.text-field fieldset {
+  border-color: #121212;
+}
+
+.text-field:hover fieldset {
+  border-color: #12121255 !important;
 }

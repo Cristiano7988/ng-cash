@@ -1,5 +1,7 @@
+import { ThemeContext } from "@emotion/react";
+import { Button, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
@@ -15,6 +17,7 @@ const Cadastro = () => {
       numero: true,
     },
   });
+  const { palette } = useContext(ThemeContext);
 
   const validaCadastro = () => Object.values(alerta).map(item =>
     Object.values(item).filter(Boolean).length
@@ -60,54 +63,107 @@ const Cadastro = () => {
 
   return (
     <section>
-      <h1>Cadastro</h1>
+      <Typography variant="h4" component="h1">
+        Cadastro
+      </Typography>
 
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
-          <input type="text" name="username" required onChange={handleChange} />
+          <TextField
+            className="text-field"
+            label="Username"
+            type="text"
+            name="username"
+            required
+            onChange={handleChange}
+          />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
-          <input
+          <TextField
+            className="text-field"
+            label="Password"
             type="password"
             name="password"
             required
             onChange={handleChange}
           />
         </div>
-        <div>
-          <ul>
+        {!!validaCadastro() && <div style={{ background: palette.background.default, display: 'inline-block', margin: '24px 0', padding: 24, borderRadius: 6 }}>
+          <List disablePadding>
             {alerta.tamanho.usuario && (
-              <li className="alerta">
-                <span>Usuário deve ter no mínimo:</span>
-                <ul>
-                  <li className="alerta">3 caracteres</li>
-                </ul>
-              </li>
+              <>
+                <ListItem disablePadding className="alerta">
+                  <ListItemText>Usuário deve ter no mínimo:</ListItemText>
+                </ListItem>
+                <List disablePadding>
+                  <ListItem
+                    disablePadding
+                    sx={{ pl: 4 }}
+                    className="alerta"
+                  >
+                    <ListItemText>
+                      3 caracteres
+                    </ListItemText>
+                  </ListItem>
+                </List>
+              </>
             )}
             {(alerta.tamanho.senha ||
               alerta.ausencia.letraMaiuscula ||
               alerta.ausencia.numero) && (
-                <li className="alerta">
-                  <span>Senha deve ter no mínimo:</span>
-                  <ul>
+                <>
+                  <ListItem disablePadding className="alerta">
+                    <ListItemText>Senha deve ter no mínimo:</ListItemText>
+                  </ListItem>
+                  <List disablePadding>
                     {alerta.tamanho.senha && (
-                      <li className="alerta">8 caracteres</li>
+                      <ListItem
+                        disablePadding
+                        sx={{ pl: 4 }}
+                        className="alerta"
+                      >
+                        <ListItemText>
+                          8 caracteres
+                        </ListItemText>
+                      </ListItem>
                     )}
                     {alerta.ausencia.letraMaiuscula && (
-                      <li className="alerta">1 letra maiúscula</li>
+                      <ListItem
+                        disablePadding
+                        sx={{ pl: 4 }}
+                        className="alerta"
+                      >
+                        <ListItemText>
+                          1 letra maiúscula
+                        </ListItemText>
+                      </ListItem>
                     )}
                     {alerta.ausencia.numero && (
-                      <li className="alerta">1 número</li>
+                      <ListItem
+                        disablePadding
+                        sx={{ pl: 4 }}
+                        className="alerta"
+                      >
+                        <ListItemText>
+                          1 número
+                        </ListItemText>
+                      </ListItem>
                     )}
-                  </ul>
-                </li>
+                  </List>
+                </>
               )}
-          </ul>
-        </div>
+          </List>
+        </div>}
         <div>
-          <button type="submit">Cadastrar</button>
+        <Button
+            style={{
+              background: palette.background.default,
+              color: palette.text.primary
+            }}
+            variant="contained"
+            type="submit"
+            children="Cadastrar"
+          />
         </div>
       </form>
     </section>

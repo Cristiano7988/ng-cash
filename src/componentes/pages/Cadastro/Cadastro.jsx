@@ -63,7 +63,7 @@ const Cadastro = () => {
 
   return (
     <section>
-      <Typography variant="h4" component="h1" style={{ paddingBottom: 24 }}>
+      <Typography variant="h4" component="h1">
         Cadastro
       </Typography>
 

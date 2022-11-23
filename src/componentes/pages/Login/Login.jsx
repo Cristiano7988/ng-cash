@@ -29,7 +29,7 @@ const Login = () => {
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ padding: '24px 0' }}>
+        <div>
           <div>
             <TextField
               className="text-field"

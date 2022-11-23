@@ -18,3 +18,4 @@ app.listen(PORT, () => {
 require('./routes/auth')(app);
 require('./routes/user')(app);
 require('./routes/users')(app);
+require('./routes/accounts')(app);

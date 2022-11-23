@@ -23,7 +23,7 @@ const checkUsernameAndPassword = (req, res) => {
       expiresIn: 86400 // 24 hours
     });
 
-    return res.send({ user: { username }, accessToken });
+    return res.send({ user: { username, account_id: user.account_id }, accessToken });
   });
 };
 

@@ -30,7 +30,7 @@ exports.cashOut = (req, res) => {
         else {
           const [cashIn] = user.rows;
 
-          if (cashIn.username === username) return res.send({ message: "A conta informada não deve ser a sua, favor informar uma conta diferente", status: false });
+          if (cashIn.account_id === parseInt(id)) return res.send({ message: "A conta informada não deve ser a sua, favor informar uma conta diferente", status: false });
 
           // Seleciona o saldo da conta de quem sofrerá o cash out
           client.query(`select balance from accounts where id = ${id}`, (error, cashOutAccount) => {

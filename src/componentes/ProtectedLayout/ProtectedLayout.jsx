@@ -13,7 +13,7 @@ import {
 import { useContext, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext, useAuth } from "../../hooks/useAuth";
-import { Logout } from "@mui/icons-material";
+import { Logout, MonetizationOn } from "@mui/icons-material";
 import { ThemeContext } from "@emotion/react";
 
 const ProtectedLayout = () => {
@@ -103,6 +103,12 @@ const ProtectedLayout = () => {
               <Avatar />{" "}
               <Link href="/dashboard/profile" style={{ color: palette.action.active, textTransform: 'capitalize' }} underline="none">
                 {username}
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <MonetizationOn />{" "}
+              <Link href="/dashboard/transactions" style={{ color: palette.action.active, textTransform: 'capitalize' }} underline="none">
+                Transações
               </Link>
             </MenuItem>
             <Divider />

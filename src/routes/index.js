@@ -11,6 +11,7 @@ import ProtectedLayout from "../componentes/ProtectedLayout";
 import HomeLayout from "../componentes/HomeLayout";
 import Cadastro from "../componentes/pages/Cadastro";
 import Home from "../componentes/pages/Home";
+import Transactions from "../componentes/pages/Transactions";
 
 function logout() {
   localStorage.removeItem("user");
@@ -58,6 +59,7 @@ export const router = createBrowserRouter(
 
       <Route path="/dashboard" element={<ProtectedLayout />}>
         <Route path="profile" element={<Profile />} />
+        <Route path="transactions" element={<Transactions />} />
       </Route>
     </Route>
   )

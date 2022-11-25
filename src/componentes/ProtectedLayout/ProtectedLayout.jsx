@@ -13,7 +13,7 @@ import {
 import { useContext, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext, useAuth } from "../../hooks/useAuth";
-import { Logout, MonetizationOn } from "@mui/icons-material";
+import { Article, Logout, MonetizationOn } from "@mui/icons-material";
 import { ThemeContext } from "@emotion/react";
 
 const ProtectedLayout = () => {
@@ -108,7 +108,13 @@ const ProtectedLayout = () => {
             <MenuItem>
               <MonetizationOn />{" "}
               <Link href="/dashboard/transactions" style={{ color: palette.action.active, textTransform: 'capitalize' }} underline="none">
-                Transações
+                Transferir
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Article />{" "}
+              <Link href="/dashboard/extract" style={{ color: palette.action.active, textTransform: 'capitalize' }} underline="none">
+                Extrato
               </Link>
             </MenuItem>
             <Divider />

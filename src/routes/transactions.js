@@ -15,4 +15,22 @@ module.exports = function(app) {
     [authJwt.verifyToken],
     controller.cashOut
   );
+
+  app.get(
+    "/api/transactions/:id",
+    [authJwt.verifyToken],
+    controller.transactions
+  );
+
+  app.get(
+    "/api/transactions/:id/cash-in",
+    [authJwt.verifyToken],
+    controller.cashIn
+  );
+
+  app.get(
+    "/api/transactions/:id/cash-out",
+    [authJwt.verifyToken],
+    controller.cashOut
+  );
 };

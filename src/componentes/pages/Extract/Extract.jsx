@@ -1,5 +1,5 @@
 import { ThemeContext } from "@emotion/react";
-import { Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../hooks/useAuth";
@@ -7,21 +7,43 @@ import { AuthContext } from "../../../hooks/useAuth";
 const Extract = () => {
     const { user } = useContext(AuthContext);
     const [transactions, setTransactions] = useState(false);
+    const [date, setDate] = useState(false);
     const { palette } = useContext(ThemeContext);
     const { account_id } = user.user;
 
+    const handleClick = async (e) => {
+        const { dataset } = e.target;
+        const paramDate = date ? `?date=${date}` : '';
+
+        const resposta = await fetch(`/api/transactions/${account_id}/cash-${dataset.query+paramDate}`, {
+            headers: {
+                'x-access-token': user.accessToken
+            }
+        })
+        .then(r => r.ok ? r.json() : false)
+
+        if (resposta.status) setTransactions(resposta.transactions)
+    }
+
+    const getTransactions = async () => {
+        const paramDate = date ? `?date=${date}` : '';
+        const resposta = await fetch(`/api/transactions/${account_id+paramDate}`, {
+            headers: {
+                'x-access-token': user.accessToken
+            }
+        })
+        .then(r => r.ok ? r.json() : false)
+
+        if (resposta.status) setTransactions(resposta.transactions)
+    }
+
+    const handleChange = (e) => {
+        const { value } = e.target;
+        setDate(value);
+    } 
+
+
     useEffect(() => {
-        const getTransactions = async () => {
-            const resposta = await fetch(`/api/transactions/${account_id}`, {
-                headers: {
-                    'x-access-token': user.accessToken
-                }
-            })
-            .then(r => r.ok ? r.json() : false)
-
-            if (resposta.status) setTransactions(resposta.transactions)
-        }
-
         if (!transactions) getTransactions()
     })
     
@@ -31,8 +53,53 @@ const Extract = () => {
             variant="h4"
             children="Extrato"
         />
+        <Button
+            data-query="in"
+            children="Cash In"
+            onClick={handleClick}
+            style={{
+                background: palette.background.default,
+                color: palette.text.primary,
+                marginRight: 12,
+                padding: 8
+            }}
+        />
+        <Button
+            data-query="out"
+            children="Cash Out"
+            onClick={handleClick}
+            style={{
+                background: palette.background.default,
+                color: palette.text.primary,
+                marginRight: 12,
+                padding: 8
+            }}
+        />
+        <Button
+            data-query="out"
+            children="Both"
+            onClick={getTransactions}
+            style={{
+                background: palette.background.default,
+                color: palette.text.primary,
+                marginRight: 12,
+                padding: 8
+            }}
+        />
+        <TextField
+            type="date"
+            size="small"
+            onChange={handleChange}
+            style={{
+                background: palette.background.default,
+                color: palette.text.primary,
+                colorScheme: 'dark',
+                borderRadius: 6
+            }}
+        />
         <Box
             sx={{
+            marginTop: '6px',
             padding: 6,
             display: 'block',
             color: palette.text.primary,

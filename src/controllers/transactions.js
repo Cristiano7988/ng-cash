@@ -78,6 +78,8 @@ exports.cashOut = (req, res) => {
 
 exports.transactions = (req, res) => {
   const { id } = req.params;
+  const { date } = req.query;
+  const queryDate = date ? `and CAST(transactions.created_at AS DATE) = '${date}'` : '';
 
   const selectTransactions = `
     select * from transactions
@@ -88,6 +90,7 @@ exports.transactions = (req, res) => {
             (transactions.debited_account_id = ${id} or
             transactions.credited_account_id = ${id}) and
             users.account_id != ${id}
+            ${queryDate}
   `;
 
   client.query(selectTransactions, (error, result) => {
@@ -101,5 +104,58 @@ exports.transactions = (req, res) => {
 
     return res.send({ message: "Transações", status: true, transactions });
   })
-  
 }
+
+exports.cashIn = (req, res) => {
+  const { id } = req.params;
+  const { date } = req.query;
+  const queryDate = date ? `and CAST(transactions.created_at AS DATE) = '${date}'` : '';
+
+  const selectTransactions = `
+    select * from transactions
+      join users on
+        users.account_id = transactions.debited_account_id
+          where
+            transactions.credited_account_id = ${id}
+            ${queryDate}
+  `;
+
+  client.query(selectTransactions, (error, result) => {
+    if (error) return res.send({ message: "Não foi possível acessar as transações", status: false });
+    const transactions = result.rows.map(transaction => {
+      delete transaction.id;
+      delete transaction.password;
+      delete transaction.account_id;
+      return transaction;
+    });
+
+    return res.send({ message: "Transações", status: true, transactions });
+  }); 
+};
+
+exports.cashOut = (req, res) => {
+  const { id } = req.params;
+  const { date } = req.query;
+  const queryDate = date ? `and CAST(transactions.created_at AS DATE) = '${date}'` : '';
+
+  const selectTransactions = `
+    select * from transactions
+      join users on
+        users.account_id = transactions.credited_account_id
+          where
+            transactions.debited_account_id = ${id}
+            ${queryDate}
+  `;
+
+  client.query(selectTransactions, (error, result) => {
+    if (error) return res.send({ message: "Não foi possível acessar as transações", status: false });
+    const transactions = result.rows.map(transaction => {
+      delete transaction.id;
+      delete transaction.password;
+      delete transaction.account_id;
+      return transaction;
+    });
+
+    return res.send({ message: "Transações", status: true, transactions });
+  });
+};

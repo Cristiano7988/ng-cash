@@ -2,7 +2,7 @@ const client = require("../connection");
 const { Pool } = require("pg");
 const pool = new Pool();
 
-exports.cashOut = (req, res) => {
+exports.postCashOut = (req, res) => {
   const { id } = req.params;
   const { value, username } = req.body;
 

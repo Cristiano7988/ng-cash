@@ -24,7 +24,7 @@ const Transactions = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios.post(`/api/accounts/${account_id}/transactions/cash-out/`, {
+    axios.post(`/api/transactions/${account_id}/cash-out/`, {
       username: transaction.username,
       value: transaction.value
     }, {

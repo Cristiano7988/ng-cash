@@ -46,15 +46,11 @@ exports.cashOut = (req, res) => {
               if (shouldAbort(error)) return;
             });
                 
-            // Registra o cash out na tabela transactions
-            client.query(`insert into transactions(value, debited_account_id) values (${value}, ${id})`, (error, transaction) => {
+            // Registra o cash out e o cash in na tabela transactions
+            client.query(`insert into transactions(value, debited_account_id, credited_account_id) values (${value}, ${id}, ${cashIn.account_id})`, (error, transaction) => {
               if (shouldAbort(error)) return;
             });
 
-            // Registra o cash in na tabela transactions
-            client.query(`insert into transactions(value, credited_account_id) values (${value}, ${cashIn.account_id})`, (error, transaction) => {
-              if (shouldAbort(error)) return;
-            });
 
             // Seleciona o saldo da conta de quem sofrerá o cash in
             client.query(`select balance from accounts where id = ${cashIn.id}`, (error, cashInAccount) => {
@@ -79,3 +75,31 @@ exports.cashOut = (req, res) => {
     });
   });
 };
+
+exports.transactions = (req, res) => {
+  const { id } = req.params;
+
+  const selectTransactions = `
+    select * from transactions
+      join users on
+        users.account_id = transactions.credited_account_id or
+        users.account_id = transactions.debited_account_id
+          where
+            (transactions.debited_account_id = ${id} or
+            transactions.credited_account_id = ${id}) and
+            users.account_id != ${id}
+  `;
+
+  client.query(selectTransactions, (error, result) => {
+    if (error) return res.send({ message: "Não foi possível acessar as transações", status: false });
+    const transactions = result.rows.map(transaction => {
+      delete transaction.id;
+      delete transaction.password;
+      delete transaction.account_id;
+      return transaction;
+    });
+
+    return res.send({ message: "Transações", status: true, transactions });
+  })
+  
+}

@@ -12,7 +12,7 @@ const Extract = () => {
 
     useEffect(() => {
         const getTransactions = async () => {
-            const resposta = await fetch(`/api/transactions/credited/${account_id}`, {
+            const resposta = await fetch(`/api/transactions/${account_id}`, {
                 headers: {
                     'x-access-token': user.accessToken
                 }

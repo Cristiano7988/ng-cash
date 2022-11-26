@@ -1,5 +1,5 @@
 import { ThemeContext } from "@emotion/react";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../../hooks/useAuth";
 
@@ -7,6 +7,7 @@ const Login = () => {
   const [acesso, setAcesso] = useState({ username: "", password: "" });
   const { palette } = useContext(ThemeContext);
   const { login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,14 +20,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(acesso);
+    setLoading(true);
+
+    login(acesso)
+    .then(r => setLoading(false))
+    .catch(() => setLoading(false))
   };
 
   return (
     <section>
-      <Typography variant="h4" component="h1">
-        Login
-      </Typography>
+      <Typography
+        component="h1"
+        variant="h4"
+        children="Login"
+      />
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -60,7 +67,7 @@ const Login = () => {
             }}
             variant="contained"
             type="submit"
-            children="Enter"
+            children={loading ? <CircularProgress style={{ width: 30, height: 30, color: palette.text.primary }} /> : "Enter" }
           />
         </div>
       </form>

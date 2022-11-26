@@ -10,8 +10,8 @@ exports.signUp = (req, res) => {
     const shouldAbort = (error) => {
       if (error) {
         client.query("ROLLBACK", (error) => {
-          if (error) console.error("Erro ao executar o rolling back", error.stack);
-          done();
+          if (error) return res.send({ message: { content: "Não foi possível realizar o rollback", status: false }, error });
+          return res.send({ message: { content: "Não foi possível cadastrar usuário", status: false }});
         });
       }
 
@@ -41,8 +41,8 @@ exports.signUp = (req, res) => {
           if (shouldAbort(error)) return;
 
           client.query("COMMIT", (error) => {
-            if (error) console.error("Erro ao executar o commit", error.stack);
-            res.send({ message: "Usuário criado", user: { username, password }, status: true })
+            if (shouldAbort(error)) return;
+            return res.send({ message: { content: "Usuário criado", status: true }, user: { username, password } })
           });
         });
       });

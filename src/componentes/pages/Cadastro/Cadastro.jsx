@@ -1,13 +1,12 @@
 import { ThemeContext } from "@emotion/react";
-import { Button, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../hooks/useAuth";
 
 const Cadastro = () => {
-  const navigate = useNavigate();
   const [cadastro, setCadastro] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const [alerta, setAlerta] = useState({
     tamanho: {
       usuario: true,
@@ -18,7 +17,7 @@ const Cadastro = () => {
       numero: true,
     },
   });
-  const { login } = useContext(AuthContext);
+  const { login, displayMessage } = useContext(AuthContext);
   const { palette } = useContext(ThemeContext);
 
   const validaCadastro = () => Object.values(alerta).map(item =>
@@ -45,33 +44,32 @@ const Cadastro = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const postUser = async () => {
+    if (validaCadastro()) return;
+    setLoading(true)
+
+    const { data } = await axios.post("http://localhost:8080/api/auth/signup", cadastro)
+    .catch(r => ({ data: { message: { content: r.message, status: false } }}));
+    const { message, user } = data;
+
+    if (message.status) login(user);
+    
+    setLoading(false);
+    displayMessage(message);
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, password } = cadastro;
-
-      if (validaCadastro()) return;
-
-    const { status, data } = await axios
-      .post("http://localhost:8080/api/auth/signup", {
-        username,
-        password,
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-
-      if ((status === 200) && data.status) {
-        login(data.user);
-      }
+    postUser();
   };
 
   return (
     <section>
-      <Typography variant="h4" component="h1">
-        Cadastro
-      </Typography>
-
+      <Typography
+        component="h1"
+        variant="h4"
+        children="Cadastro"
+      />
       <form onSubmit={handleSubmit}>
         <div>
           <TextField
@@ -113,9 +111,12 @@ const Cadastro = () => {
                 </List>
               </>
             )}
-            {(alerta.tamanho.senha ||
-              alerta.ausencia.letraMaiuscula ||
-              alerta.ausencia.numero) && (
+            {
+              (
+                alerta.tamanho.senha ||
+                alerta.ausencia.letraMaiuscula ||
+                alerta.ausencia.numero
+              ) && (
                 <>
                   <ListItem disablePadding className="alerta">
                     <ListItemText>Senha deve ter no mínimo:</ListItemText>
@@ -156,18 +157,19 @@ const Cadastro = () => {
                     )}
                   </List>
                 </>
-              )}
+              )
+            }
           </List>
         </div>}
         <div>
-        <Button
+          <Button
             style={{
               background: palette.background.default,
               color: palette.text.primary
             }}
             variant="contained"
             type="submit"
-            children="Cadastrar"
+            children={loading ? <CircularProgress style={{ width: 30, height: 30, color: palette.text.primary }} /> : "Cadastrar"}
           />
         </div>
       </form>

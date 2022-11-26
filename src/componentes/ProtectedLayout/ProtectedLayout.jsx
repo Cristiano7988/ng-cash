@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   Tooltip,
   Container,
+  Alert,
 } from "@mui/material";
 import { useContext, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
@@ -18,8 +19,7 @@ import { ThemeContext } from "@emotion/react";
 
 const ProtectedLayout = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user } = useAuth();
-  const { logout } = useContext(AuthContext);
+  const { user, message, logout } = useContext(AuthContext);
   const { palette } = useContext(ThemeContext);
 
   const open = Boolean(anchorEl);
@@ -29,7 +29,7 @@ const ProtectedLayout = () => {
 
   if (!user) return <Navigate to="/" />;
 
-  const { username } = user.user;
+  const { username } = user;
   const [firstLetter] = username.split("");
 
   return (
@@ -128,6 +128,7 @@ const ProtectedLayout = () => {
         </nav>
       </Box>
       <Container style={{ padding: 24 }}>
+        {message && <Alert style={{ position: 'absolute', opacity: .975 }} severity={message.status ? "success" : "error"}>{message.content}</Alert>}
         <Outlet />
       </Container>
     </div>

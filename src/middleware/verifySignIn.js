@@ -8,8 +8,8 @@ const checkUsernameAndPassword = (req, res) => {
 
   // Busca por usuário com o mesmo username
   client.query(`select * from users where username = '${ username }'`, (error, { rows }) => {
-    if (error) return res.send({ message: "Não foi possível encontrar o usuário", status: false, error, accessToken: null, })
-    else if (!rows.length) return res.send({ message: "Usuário não encontrado", status: false, accessToken: null })
+    if (error) return res.send({ message: { content: "Não foi possível encontrar o usuário", status: false }, error })
+    else if (!rows.length) return res.send({ message: { content: "Usuário não encontrado", status: false }})
     const [ user ] = rows;
     
     const validPassword = bcrypt.compareSync(
@@ -17,13 +17,13 @@ const checkUsernameAndPassword = (req, res) => {
         user.password
     );
 
-    if (!validPassword) return res.send({ message: "Senha inválida", status: false, accessToken: null, })
+    if (!validPassword) return res.send({ message: {content: "Senha inválida", status: false }})
 
     const accessToken = jwt.sign({ id: user.id }, config.secret, {
       expiresIn: 86400 // 24 hours
     });
 
-    return res.send({ user: { username, account_id: user.account_id }, accessToken });
+    return res.send({ user: { username, account_id: user.account_id, accessToken }, message: { content: "Usuário logado", status: true }});
   });
 };
 

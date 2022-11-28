@@ -14,7 +14,6 @@ module.exports = function (app) {
     "/api/auth/signin",
     [
       verifySignIn.checkUsernameAndPassword
-    ],
-    controller.signIn
+    ]
   );
 };

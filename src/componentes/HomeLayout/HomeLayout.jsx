@@ -1,7 +1,7 @@
 import { Navigate, NavLink, Outlet } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { AuthContext } from "../../hooks/useAuth";
 import { useContext, useState } from 'react';
-import { Box, Tabs, Tab, Container } from '@mui/material';
+import { Box, Tabs, Tab, Container, Alert } from '@mui/material';
 import { ThemeContext } from "@emotion/react";
 
 const getIndex = (links, innerText = null) => {
@@ -18,7 +18,7 @@ const HomeLayout = () => {
     { label: "Login", to:"/login" }
   ];
 
-  const { user } = useAuth();  
+  const { user, message } = useContext(AuthContext); 
   const [value, setValue] = useState(getIndex(links));
   const { palette } = useContext(ThemeContext);
 
@@ -65,6 +65,7 @@ const HomeLayout = () => {
         </nav>
       </Box>
       <Container style={{ padding: 24 }}>
+        {message && <Alert style={{ position: 'absolute', opacity: .975 }} severity={message.status ? "success" : "error"}>{message.content}</Alert>}
         <Outlet />
       </Container>
     </div>

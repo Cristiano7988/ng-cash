@@ -10,12 +10,6 @@ module.exports = function(app) {
     next();
   });
 
-  app.post(
-    "/api/accounts/:id/transactions/cash-out",
-    [authJwt.verifyToken],
-    controller.cashOut
-  );
-
   app.get(
     "/api/transactions/:id",
     [authJwt.verifyToken],
@@ -32,5 +26,11 @@ module.exports = function(app) {
     "/api/transactions/:id/cash-out",
     [authJwt.verifyToken],
     controller.cashOut
+  );
+
+  app.post(
+    "/api/transactions/:id/cash-out",
+    [authJwt.verifyToken],
+    controller.postCashOut
   );
 };
